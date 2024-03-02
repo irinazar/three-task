@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "SIP Softphone",
+  "version": "1.0",
+  "description": "Расширение для работы с протоколом SIP",
+  "permissions": ["tabs", "storage", "activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["bundle.js"],
+      "css": ["popup.css"]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' 'unsafe-inline'; object-src 'self'; style-src 'self' 'unsafe-inline'; media-src *"
+    />
+    <title>SIP Softphone</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>SIP Softphone</h1>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Логин" />
+        <input type="password" id="password" placeholder="Пароль" />
+        <input type="text" id="server" placeholder="Сервер" />
+        <button type="submit">Войти</button>
+      </form>
+      <div id="callInfo" style="display: none;">
+        <span id="callerName"></span>
+        <span id="callDuration"></span>
+      </div>
+      <div id="callStatus">
+        <span id="callStatusText">Ожидание</span>
+      </div>
+      <div id="callControls">
+        <button id="makeCall">Совершить звонок</button>
+        <input type="text" id="callee" placeholder="Абонент" />
+        <button id="endCall">Завершить звонок</button>
+      </div>
+      <ul id="callHistory"></ul>
+    </div>
+    <script src="./bundle.js"></script>
+  </body>
+</html>
