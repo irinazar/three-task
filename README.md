@@ -6,6 +6,6 @@ npm i
 
 npm build 
 
-open localhost 
+открой localhost 
 
 добавить расширение в Chrome через режим разработчика
