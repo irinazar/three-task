@@ -29,20 +29,36 @@ function registerUser(configuration) {
     if (session.direction === "incoming") {
       incomingSession = session;
 
+      const incomingCall = confirm(
+        "Входящий звонок от " + session.remote_identity.uri.user + ". Принять?"
+      );
+
+      incomingSession.on("progress", function (e) {
+        updateCallStatus("В процессе");
+        displayCallInfo(session.remote_identity.uri.user);
+      });
+
       incomingSession.on("failed", function (e) {
         updateCallStatus("Завершено" + e.cause);
         addToCallHistory(session.remote_identity.uri.user, "failed");
+        incomingSession = null;
+        document.getElementById("callInfo").style.display = "none";
+        clearTimeout(timer);
       });
 
       incomingSession.on("confirmed", function (e) {
         updateCallStatus("В процессе");
         displayCallInfo(session.remote_identity.uri.user);
-        startCallTimer(timer);
+        startCallTimer();
       });
 
-      const incomingCall = confirm(
-        "Входящий звонок от " + session.remote_identity.uri.user + ". Принять?"
-      );
+      incomingSession.on("ended", function (e) {
+        updateCallStatus("Завершено: " + e.cause);
+        addToCallHistory(session.remote_identity.uri.user, "ended");
+        incomingSession = null;
+        document.getElementById("callInfo").style.display = "none";
+        clearTimeout(timer);
+      });
 
       if (incomingCall) {
         session.answer({
@@ -67,11 +83,17 @@ function registerUser(configuration) {
       callSession.on("failed", function (e) {
         updateCallStatus("Завершено: " + e.cause);
         addToCallHistory(session.remote_identity.uri.user, "failed");
+        callSession = null;
+        document.getElementById("callInfo").style.display = "none";
+        clearTimeout(timer);
       });
 
       callSession.on("ended", function (e) {
         updateCallStatus("Завершено: " + e.cause);
         addToCallHistory(session.remote_identity.uri.user, "ended");
+        callSession = null;
+        document.getElementById("callInfo").style.display = "none";
+        clearTimeout(timer);
       });
     }
   });
@@ -92,15 +114,21 @@ function makeCall(callee, server) {
   };
 
   callSession = userAgent.call("sip:" + callee + "@" + server, callOptions);
+  document.getElementById("callee").value = "";
 }
 
 function endCall() {
   if (callSession) {
     callSession.terminate();
+    clearInterval(timer);
+
     callSession = null;
   } else if (incomingSession) {
     incomingSession.terminate();
+
     addToCallHistory(incomingSession.remote_identity.uri.user, "ended");
+    clearInterval(timer);
+
     incomingSession = null;
   }
   duration = null;
@@ -125,11 +153,14 @@ function startCallTimer() {
   const callStartTime = new Date().getTime();
   const callDurationSpan = document.getElementById("callDuration");
 
+  callDurationSpan.textContent = "";
+
   function updateDuration() {
     const currentTime = new Date().getTime();
     duration = formatDuration(currentTime - callStartTime);
     callDurationSpan.textContent = duration;
   }
+  updateDuration();
 
   timer = setInterval(updateDuration, 1000);
 }
@@ -203,13 +234,12 @@ function start() {
       return;
     }
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(
-      makeCall(callee, serverValue)
-    )
-    .catch(function(error) {
-      alert('Пожалуйста, разрешите доступ, чтобы совершить звонок.');
-    });
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(makeCall(callee, serverValue))
+      .catch(function (error) {
+        alert("Пожалуйста, разрешите доступ, чтобы совершить звонок.");
+      });
 
     // makeCall(callee, serverValue);
   });

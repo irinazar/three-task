@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' 'unsafe-inline'; object-src 'self'; style-src 'self' 'unsafe-inline'; media-src *"
-    />
-    <title>SIP Softphone</title>
-    <link rel="stylesheet" href="./popup.css" />
-  </head>
-  <body>
-    <div id="app">
-      <h1>SIP Softphone</h1>
-      <form id="loginForm">
-        <input type="text" id="username" placeholder="Логин" />
-        <input type="password" id="password" placeholder="Пароль" />
-        <input type="text" id="server" placeholder="Сервер" />
-        <button type="submit">Войти</button>
-      </form>
-      <div id="callInfo" style="display: none;">
-        <span id="callerName"></span>
-        <span id="callDuration"></span>
-      </div>
-      <div id="callStatus">
-        <span id="callStatusText">Ожидание</span>
-      </div>
-      <div id="callControls">
-        <button id="makeCall">Совершить звонок</button>
-        <input type="text" id="callee" placeholder="Абонент" />
-        <button id="endCall">Завершить звонок</button>
-      </div>
-      <ul id="callHistory"></ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' 'unsafe-inline'; object-src 'self'; style-src 'self' 'unsafe-inline'; media-src *" />
+  <title>SIP Softphone</title>
+  <link rel="stylesheet" href="./popup.css" />
+</head>
+<body>
+  <div id="app" class="container">
+    <h1 class="heading">SIP Softphone</h1>
+    <form id="loginForm" class="form">
+      <input type="text" id="username" placeholder="Логин" class="input" />
+      <input type="password" id="password" placeholder="Пароль" class="input" />
+      <input type="text" id="server" placeholder="Сервер" class="input" />
+      <button type="submit" class="button">Войти</button>
+    </form>
+    <div id="callInfo" class="call-info" style="display: none;">
+      <span id="callerName" class="call-info__name"></span>
+      <span id="callDuration" class="call-info__duration"></span>
     </div>
-    <script src="./bundle.js"></script>
-  </body>
+    <div id="callStatus" class="call-status">
+      <span id="callStatusText" class="call-status__text">Ожидание</span>
+    </div>
+    <div id="callControls" class="call-controls">
+      <button id="makeCall" class="button call-controls__button">Совершить звонок</button>
+      <input type="text" id="callee" placeholder="Абонент" class="input call-controls__input" />
+      <button id="endCall" class="button call-controls__button">Завершить звонок</button>
+    </div>
+    <ul id="callHistory" class="call-history"></ul>
+  </div>
+  <script src="./bundle.js"></script>
+</body>
 </html>
