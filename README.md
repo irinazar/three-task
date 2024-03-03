@@ -6,6 +6,6 @@ npm i
 
 npm build 
 
-открыть localhost 
+открыть golive dist/popup.html
 
 добавить расширение в Chrome через режим разработчика
