@@ -33,6 +33,12 @@ function registerUser(configuration) {
         "Входящий звонок от " + session.remote_identity.uri.user + ". Принять?"
       );
 
+      incomingSession.on("accepted", function (e) {
+        updateCallStatus("В процессе");
+        displayCallInfo(session.remote_identity.uri.user);
+        startCallTimer();
+      });
+
       incomingSession.on("progress", function (e) {
         updateCallStatus("В процессе");
         displayCallInfo(session.remote_identity.uri.user);
@@ -64,11 +70,23 @@ function registerUser(configuration) {
         session.answer({
           mediaConstraints: { audio: true, video: true },
         });
+
+        incomingSession.connection.addEventListener("addstream", function (e) {
+          const audioElement = document.getElementById("remoteAudio");
+          audioElement.srcObject = e.stream;
+          audioElement.play();
+        });
       } else {
         session.terminate();
       }
     } else {
       callSession = session;
+
+      callSession.connection.addEventListener("addstream", function (e) {
+        const audioElement = document.getElementById("remoteAudio");
+        audioElement.srcObject = e.stream;
+        audioElement.play();
+      });
 
       callSession.on("progress", function (e) {
         updateCallStatus("В процессе");
@@ -234,14 +252,14 @@ function start() {
       return;
     }
 
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(makeCall(callee, serverValue))
-      .catch(function (error) {
-        alert("Пожалуйста, разрешите доступ, чтобы совершить звонок.");
-      });
+    // navigator.mediaDevices
+    //   .getUserMedia({ audio: true })
+    //   .then(makeCall(callee, serverValue))
+    //   .catch(function (error) {
+    //     alert("Пожалуйста, разрешите доступ, чтобы совершить звонок.");
+    //   });
 
-    // makeCall(callee, serverValue);
+    makeCall(callee, serverValue);
   });
 }
 

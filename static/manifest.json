@@ -4,7 +4,6 @@
   "version": "1.0",
   "description": "Расширение для работы с протоколом SIP",
   "permissions": ["tabs", "storage", "activeTab"],
-  "optional_permissions": ["tabs"],
   "optional_host_permissions": ["https://*/*"],
   "action": {
     "default_popup": "popup.html"
